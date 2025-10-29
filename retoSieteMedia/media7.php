@@ -98,6 +98,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         mostrarTabla($jugadores, $cartasJugadores, $puntuaciones, $numCartas);
         echo "TOTAL PREMIOS#" . count($ganadores) . "#{$premioTotal}";
 
+        //Ficheros
+        $fecha = date("dmYHis");//El formato "dmYHis" produce: día(2) mes(2) AÑO(4) Hora(2) minutos(2) segundos(2).
+        $nombreFichero = "apuestas_{$fecha}.txt";
+        $f = fopen($nombreFichero, "w");
+
+        if ($f) 
+        {
+            for ($i = 0; $i < count($jugadores); $i++) 
+            {
+                //explode(" ", ...) divide la cadena por espacios en un array de palabras
+                $palabras = explode(" ", strtoupper($jugadores[$i]));
+                $iniciales = "";
+
+                foreach ($palabras as $p) 
+                {
+                    $iniciales .= substr($p, 0, 1);//substr($p, 0, 1) obtiene la primera letra de la palabra.
+                }
+
+                // Importe ganado
+                if (in_array($i, $ganadores)) //in_array($i, $ganadores) devuelve true si el jugador es ganador.
+                {
+                    $importeGanado = $premioPorJugador;
+                } else {
+                    $importeGanado = 0;
+                }
+
+                $linea = "{$iniciales}#{$puntuaciones[$i]}#{$importeGanado}\n";
+                fwrite($f, $linea);
+            }
+
+            $lineaFinal = "TOTAL PREMIOS#" . count($ganadores) . "#{$premioTotal}\n";
+            fwrite($f, $lineaFinal);
+            fclose($f);
+
+            echo "<strong>Fichero generado correctamente:</strong> {$nombreFichero}";
+        } else {
+            echo "<strong>Error al crear el fichero.</strong>";
+        }
 
     }//else
 

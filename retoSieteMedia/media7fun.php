@@ -59,18 +59,22 @@ function calcularPuntuacion($cartas)
 function mostrarTabla($jugadores, $cartasJugadores, $puntuaciones, $numCartas) 
 {
     echo "<table border='1'>";
+    echo "<tr><th>Jugador</th>";
 
-    for ($i = 0; $i < count($jugadores); $i++) 
-    {
-        echo "<tr>";
-        echo "<td>{$jugadores[$i]}</td>";
+    for ($i = 1; $i <= $numCartas; $i++) {
+        echo "<th>Carta $i</th>";
+    }
 
-        foreach ($cartasJugadores[$i] as $carta) 
-        {
+    echo "<th>Puntuación</th></tr>";
+
+    for ($i = 0; $i < count($jugadores); $i++) {
+        echo "<tr><td>{$jugadores[$i]}</td>";
+
+        foreach ($cartasJugadores[$i] as $carta) {
             echo "<td><img src='images/{$carta}.PNG' width='70'></td>";
         }
 
-        echo "</tr>";
+        echo "<td>{$puntuaciones[$i]}</td></tr>";
     }
 
     echo "</table>";
